@@ -1,0 +1,10 @@
+Package: com.example.itimemachine
+Name: iTimeMachine
+Version: 0.1.0
+Architecture: iphoneos-arm
+Description: iOS 6-styled IPA browser and installer (jailbreak only)
+Maintainer: iTimeMachine
+Author: iTimeMachine
+Section: Utilities
+Depends: firmware (>= 6.0)
+Priority: optional

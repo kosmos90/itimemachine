@@ -1,0 +1,249 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		1D60589D0D05DD3D006BFB54 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D60589C0D05DD3D006BFB54 /* main.m */; };
+		AA0001010000000000000001 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = AA0001000000000000000002 /* AppDelegate.m */; };
+		AA0001030000000000000003 /* CatalogViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AA0001020000000000000004 /* CatalogViewController.m */; };
+ 		AA0002000000000000000001 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AA0002000000000000000002 /* UIKit.framework */; };
+ 		AA0002000000000000000003 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AA0002000000000000000004 /* Foundation.framework */; };
+ 		AA0002000000000000000005 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AA0002000000000000000006 /* CoreGraphics.framework */; };
+ 		AA0002100000000000000001 /* ITMAppItem.m in Sources */ = {isa = PBXBuildFile; fileRef = AA0002100000000000000003 /* ITMAppItem.m */; };
+ 		AA0002100000000000000004 /* CatalogService.m in Sources */ = {isa = PBXBuildFile; fileRef = AA0002100000000000000006 /* CatalogService.m */; };
+ 		AA0002100000000000000007 /* DetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AA0002100000000000000009 /* DetailViewController.m */; };
+ 		AA0002200000000000000001 /* catalog.json in Resources */ = {isa = PBXBuildFile; fileRef = AA0002200000000000000002 /* catalog.json */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		1D60589C0D05DD3D006BFB54 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		1D6058910D05DD3D006BFB54 /* iTimeMachine.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iTimeMachine.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		AA0000FF0000000000000001 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		AA0001000000000000000002 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		AA0001010000000000000003 /* CatalogViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CatalogViewController.h; sourceTree = "<group>"; };
+		AA0001020000000000000004 /* CatalogViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CatalogViewController.m; sourceTree = "<group>"; };
+		AA0001040000000000000005 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+ 		AA0002000000000000000002 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+ 		AA0002000000000000000004 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+ 		AA0002000000000000000006 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+ 		AA0002100000000000000002 /* ITMAppItem.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ITMAppItem.h; sourceTree = "<group>"; };
+ 		AA0002100000000000000003 /* ITMAppItem.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ITMAppItem.m; sourceTree = "<group>"; };
+ 		AA0002100000000000000005 /* CatalogService.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CatalogService.h; sourceTree = "<group>"; };
+ 		AA0002100000000000000006 /* CatalogService.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CatalogService.m; sourceTree = "<group>"; };
+ 		AA0002100000000000000008 /* DetailViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DetailViewController.h; sourceTree = "<group>"; };
+ 		AA0002100000000000000009 /* DetailViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DetailViewController.m; sourceTree = "<group>"; };
+ 		AA0002200000000000000002 /* catalog.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = catalog.json; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		1D60588F0D05DD3D006BFB54 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AA0002000000000000000001 /* UIKit.framework in Frameworks */,
+				AA0002000000000000000003 /* Foundation.framework in Frameworks */,
+				AA0002000000000000000005 /* CoreGraphics.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		1D60588D0D05DD3D006BFB54 = {
+			isa = PBXGroup;
+			children = (
+				AA0002000000000000000004 /* Foundation.framework */,
+				AA0002000000000000000006 /* CoreGraphics.framework */,
+				AA0002000000000000000002 /* UIKit.framework */,
+				AA0001100000000000000006 /* iTimeMachine */,
+				1D6058920D05DD3E006BFB54 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		1D6058920D05DD3E006BFB54 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				1D6058910D05DD3D006BFB54 /* iTimeMachine.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		AA0001100000000000000006 /* iTimeMachine */ = {
+			isa = PBXGroup;
+			children = (
+				AA0000FF0000000000000001 /* AppDelegate.h */,
+				AA0001000000000000000002 /* AppDelegate.m */,
+				AA0001010000000000000003 /* CatalogViewController.h */,
+				AA0001020000000000000004 /* CatalogViewController.m */,
+				AA0002100000000000000002 /* ITMAppItem.h */,
+				AA0002100000000000000003 /* ITMAppItem.m */,
+				AA0002100000000000000005 /* CatalogService.h */,
+				AA0002100000000000000006 /* CatalogService.m */,
+				AA0002100000000000000008 /* DetailViewController.h */,
+				AA0002100000000000000009 /* DetailViewController.m */,
+				1D60589C0D05DD3D006BFB54 /* main.m */,
+				AA0001040000000000000005 /* Info.plist */,
+				AA0002200000000000000002 /* catalog.json */,
+			);
+			path = iTimeMachine;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		1D6058900D05DD3D006BFB54 /* iTimeMachine */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C01FCF4A08A954540054247B /* Build configuration list for PBXNativeTarget "iTimeMachine" */;
+			buildPhases = (
+				1D60588E0D05DD3D006BFB54 /* Sources */,
+				1D60588F0D05DD3D006BFB54 /* Frameworks */,
+				AA0002300000000000000001 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = iTimeMachine;
+			productName = iTimeMachine;
+			productReference = 1D6058910D05DD3D006BFB54 /* iTimeMachine.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		1D60588D0D05DD3D006BFB54 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0500;
+				ORGANIZATIONNAME = "iTimeMachine";
+			};
+			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "iTimeMachine" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 1D60588D0D05DD3D006BFB54;
+			productRefGroup = 1D6058920D05DD3E006BFB54 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				1D6058900D05DD3D006BFB54 /* iTimeMachine */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		AA0002300000000000000001 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AA0002200000000000000001 /* catalog.json in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		1D60588E0D05DD3D006BFB54 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1D60589D0D05DD3D006BFB54 /* main.m in Sources */,
+				AA0001010000000000000001 /* AppDelegate.m in Sources */,
+				AA0001030000000000000003 /* CatalogViewController.m in Sources */,
+				AA0002100000000000000001 /* ITMAppItem.m in Sources */,
+				AA0002100000000000000004 /* CatalogService.m in Sources */,
+				AA0002100000000000000007 /* DetailViewController.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		C01FCF4B08A954540054247B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
+				SDKROOT = iphoneos6.1;
+			};
+			name = Debug;
+		};
+		C01FCF4C08A954540054247B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
+				SDKROOT = iphoneos6.1;
+			};
+			name = Release;
+		};
+		C01FCF4F08A954540054247B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "iTimeMachine/iTimeMachine-Prefix.pch";
+				INFOPLIST_FILE = "iTimeMachine/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos6.1;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				WRAPPER_EXTENSION = app;
+				CLANG_ENABLE_OBJC_ARC = YES;
+			};
+			name = Debug;
+		};
+		C01FCF5008A954540054247B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "iTimeMachine/iTimeMachine-Prefix.pch";
+				INFOPLIST_FILE = "iTimeMachine/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos6.1;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				WRAPPER_EXTENSION = app;
+				CLANG_ENABLE_OBJC_ARC = YES;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		C01FCF4A08A954540054247B /* Build configuration list for PBXNativeTarget "iTimeMachine" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C01FCF4F08A954540054247B /* Debug */,
+				C01FCF5008A954540054247B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		C01FCF4E08A954540054247B /* Build configuration list for PBXProject "iTimeMachine" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C01FCF4B08A954540054247B /* Debug */,
+				C01FCF4C08A954540054247B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 1D60588D0D05DD3D006BFB54 /* Project object */;
+}

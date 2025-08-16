@@ -1,0 +1,18 @@
+{
+  "items": [
+    {
+      "name": "Example App A",
+      "bundle_id": "com.example.a",
+      "min_ios": "5.0",
+      "download_url": "https://example.com/ExampleA.ipa",
+      "icon": null
+    },
+    {
+      "name": "Example App B",
+      "bundle_id": "com.example.b",
+      "min_ios": "6.0",
+      "download_url": "https://example.com/ExampleB.ipa",
+      "icon": null
+    }
+  ]
+}

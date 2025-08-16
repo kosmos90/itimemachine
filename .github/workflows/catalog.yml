@@ -1,0 +1,118 @@
+name: Build Catalog
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Release tag (e.g., v0.1.0)'
+        required: false
+  schedule:
+    - cron: '0 3 * * *'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: Install deps
+        run: |
+          python -m pip install --upgrade pip
+          pip install requests
+
+      - name: Build catalog
+        run: |
+          python tools/fetch_catalog.py --owner stuffed18 --repo ipa-archive-updated --out catalog/catalog.json
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: catalog.json
+          path: catalog/catalog.json
+
+  macos-build:
+    runs-on: macos-latest
+    continue-on-error: true
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Show Xcode info
+        run: |
+          xcodebuild -version
+          xcode-select -p
+
+      - name: Download iOS 6.1 SDK
+        run: |
+          curl -L -o /tmp/iPhoneOS6.1.sdk.zip https://github.com/growtopiajaw/iPhoneOS-SDK/releases/download/v1.0/iPhoneOS6.1.sdk.zip
+          unzip -q /tmp/iPhoneOS6.1.sdk.zip -d /tmp
+
+      - name: Install SDK into Xcode
+        run: |
+          sudo mkdir -p "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/"
+          sudo cp -R "/tmp/iPhoneOS6.1.sdk" "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/"
+          ls -la "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/"
+
+      - name: Attempt build with iphoneos6.1
+        run: |
+          xcodebuild -project app/iTimeMachine.xcodeproj \
+                     -target iTimeMachine \
+                     -configuration Release \
+                     -sdk iphoneos6.1 \
+                     IPHONEOS_DEPLOYMENT_TARGET=6.1 \
+                     ARCHS=armv7 \
+                     build
+
+  theos-build:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install dependencies
+        run: |
+          brew install llvm ldid libplist libxml2 dpkg
+
+      - name: Install Theos
+        run: |
+          git clone --recursive --depth=1 https://github.com/theos/theos.git $HOME/theos
+
+      - name: Download iPhoneOS6.1 SDK
+        run: |
+          curl -L -o iPhoneOS6.1.sdk.zip https://github.com/growtopiajaw/iPhoneOS-SDK/releases/download/v1.0/iPhoneOS6.1.sdk.zip
+          unzip -q iPhoneOS6.1.sdk.zip -d $HOME/theos/sdks
+
+      - name: Build Theos GUI app
+        run: |
+          export THEOS="$HOME/theos"
+          export SDKVERSION=6.1
+          cd theos
+          make clean
+          make package
+
+      - name: Upload Theos artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: iTimeMachine-theos
+          path: |
+            theos/packages/*.deb
+            theos/.theos/obj/*
+
+      - name: Upload to GitHub Release (optional)
+        if: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.tag != '' }}
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.event.inputs.tag }}
+          name: Release ${{ github.event.inputs.tag }}
+          files: |
+            theos/packages/*.deb
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

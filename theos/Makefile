@@ -27,3 +27,8 @@ iTimeMachine_RESOURCE_FILES = \
 iTimeMachine_INFOPLIST = Info.plist
 
 include $(THEOS_MAKE_PATH)/application.mk
+
+# After staging, ensure a retina icon exists by copying icon.png to icon@2x.png
+after-iTimeMachine-stage::
+	@cp -f "$(THEOS_STAGING_DIR)/Applications/$(APPLICATION_NAME).app/icon.png" \
+	      "$(THEOS_STAGING_DIR)/Applications/$(APPLICATION_NAME).app/icon@2x.png"

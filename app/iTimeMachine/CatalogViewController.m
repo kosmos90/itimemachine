@@ -17,6 +17,7 @@
 
     self.searchBar = [[UISearchBar alloc] initWithFrame:CGRectZero];
     self.searchBar.delegate = self;
+    [self.searchBar sizeToFit]; // ensure proper height on iOS 6
     self.tableView.tableHeaderView = self.searchBar;
 
     // Load bundled first (instant UI), then try remote

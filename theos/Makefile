@@ -35,3 +35,9 @@ after-iTimeMachine-stage::
 	# Ensure Info.plist exists in the staged bundle
 	@cp -f "$(PWD)/Info.plist" \
 	      "$(THEOS_STAGING_DIR)/Applications/$(APPLICATION_NAME).app/Info.plist"
+	# Overwrite bundled catalog with latest fetched one if available
+	@if [ -f "$(PWD)/../catalog/catalog.json" ]; then \
+	  echo "Using repo catalog.json"; \
+	  cp -f "$(PWD)/../catalog/catalog.json" \
+	        "$(THEOS_STAGING_DIR)/Applications/$(APPLICATION_NAME).app/catalog.json"; \
+	fi

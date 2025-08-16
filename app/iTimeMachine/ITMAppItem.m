@@ -14,6 +14,7 @@
         item.minIOS = d[@"min_ios"] ?: @"";
         item.downloadURL = d[@"download_url"] ?: @"";
         item.iconPath = d[@"icon"] ?: @"";
+        item.desc = d[@"description"] ?: @"";
         [out addObject:item];
     }
     return out;

@@ -1,6 +1,7 @@
 #import "DetailViewController.h"
 #import "ITMAppItem.h"
  #import <Foundation/Foundation.h>
+ #import <QuartzCore/QuartzCore.h>
  #include <spawn.h>
  #include <sys/wait.h>
  extern char **environ;
@@ -8,6 +9,8 @@
 @interface DetailViewController ()
 @property (nonatomic, strong) UILabel *titleLabel;
 @property (nonatomic, strong) UILabel *bundleLabel;
+@property (nonatomic, strong) UITextView *descView;
+@property (nonatomic, strong) UIImageView *iconView;
 @property (nonatomic, strong) UIButton *installButton;
 @end
 
@@ -21,19 +24,35 @@
     CGFloat pad = 12.0;
     CGRect b = self.view.bounds;
 
-    UILabel *t = [[UILabel alloc] initWithFrame:CGRectMake(pad, 100, b.size.width - pad*2, 28)];
+    // Icon
+    UIImageView *iv = [[UIImageView alloc] initWithFrame:CGRectMake(pad, 80, 57, 57)];
+    iv.contentMode = UIViewContentModeScaleAspectFit;
+    iv.layer.cornerRadius = 11.0;
+    iv.layer.masksToBounds = YES;
+    [self.view addSubview:iv];
+    self.iconView = iv;
+
+    UILabel *t = [[UILabel alloc] initWithFrame:CGRectMake(pad + 57 + 10, 80, b.size.width - (pad + 57 + 10) - pad, 24)];
     t.font = [UIFont boldSystemFontOfSize:20];
     [self.view addSubview:t];
     self.titleLabel = t;
 
-    UILabel *bd = [[UILabel alloc] initWithFrame:CGRectMake(pad, 140, b.size.width - pad*2, 20)];
+    UILabel *bd = [[UILabel alloc] initWithFrame:CGRectMake(pad + 57 + 10, 108, b.size.width - (pad + 57 + 10) - pad, 18)];
     bd.font = [UIFont systemFontOfSize:14];
     bd.textColor = [UIColor darkGrayColor];
     [self.view addSubview:bd];
     self.bundleLabel = bd;
 
+    UITextView *dv = [[UITextView alloc] initWithFrame:CGRectMake(pad, 150, b.size.width - pad*2, 120)];
+    dv.font = [UIFont systemFontOfSize:14];
+    dv.textColor = [UIColor blackColor];
+    dv.editable = NO;
+    dv.backgroundColor = [UIColor clearColor];
+    [self.view addSubview:dv];
+    self.descView = dv;
+
     UIButton *btn = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-    btn.frame = CGRectMake(pad, 190, 160, 36);
+    btn.frame = CGRectMake(pad, CGRectGetMaxY(dv.frame) + 10, 180, 36);
     [btn setTitle:@"Install (WIP)" forState:UIControlStateNormal];
     [btn addTarget:self action:@selector(onInstall) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:btn];
@@ -53,6 +72,24 @@
     self.titleLabel.text = self.item.name ?: @"";
     NSString *min = self.item.minIOS.length ? [NSString stringWithFormat:@" • iOS %@+", self.item.minIOS] : @"";
     self.bundleLabel.text = [NSString stringWithFormat:@"%@%@", self.item.bundleID ?: @"", min];
+    NSString *d = self.item.desc.length ? self.item.desc : @"No description :<";
+    self.descView.text = d;
+
+    // Load icon if we have a URL; otherwise clear
+    self.iconView.image = nil;
+    if (self.item.iconPath.length) {
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            NSData *data = [NSData dataWithContentsOfURL:[NSURL URLWithString:self.item.iconPath]];
+            if (data) {
+                UIImage *img = [UIImage imageWithData:data];
+                if (img) {
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        self.iconView.image = img;
+                    });
+                }
+            }
+        });
+    }
 }
 
 - (void)onInstall {

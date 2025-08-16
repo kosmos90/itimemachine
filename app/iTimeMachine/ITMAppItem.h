@@ -6,6 +6,7 @@
 @property (nonatomic, copy) NSString *minIOS;
 @property (nonatomic, copy) NSString *downloadURL;
 @property (nonatomic, copy) NSString *iconPath;
+@property (nonatomic, copy) NSString *desc;
 
 + (NSArray *)itemsFromCatalogDictionary:(NSDictionary *)catalog;
 @end

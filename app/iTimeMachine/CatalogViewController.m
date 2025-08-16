@@ -19,9 +19,21 @@
     self.searchBar.delegate = self;
     self.tableView.tableHeaderView = self.searchBar;
 
-    // Load bundled catalog
+    // Load bundled first (instant UI), then try remote
     self.items = [CatalogService loadBundledCatalogItems];
     self.filtered = self.items ?: @[];
+    [self.tableView reloadData];
+
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        NSArray *remote = [CatalogService loadRemoteCatalogItems];
+        if (remote.count > 0) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                self.items = remote;
+                self.filtered = remote;
+                [self.tableView reloadData];
+            });
+        }
+    });
 }
 
 #pragma mark - Table view

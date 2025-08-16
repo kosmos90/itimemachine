@@ -9,12 +9,12 @@
     for (NSDictionary *d in raw) {
         if (![d isKindOfClass:[NSDictionary class]]) continue;
         ITMAppItem *item = [ITMAppItem new];
-        item.name = d[@"name"] ?: @"Unknown";
-        item.bundleID = d[@"bundle_id"] ?: @"";
-        item.minIOS = d[@"min_ios"] ?: @"";
-        item.downloadURL = d[@"download_url"] ?: @"";
-        item.iconPath = d[@"icon"] ?: @"";
-        item.desc = d[@"description"] ?: @"";
+        id name = d[@"name"]; item.name = [name isKindOfClass:[NSString class]] ? name : [name description] ?: @"Unknown";
+        id bid = d[@"bundle_id"]; item.bundleID = [bid isKindOfClass:[NSString class]] ? bid : (bid ? [bid description] : @"");
+        id min = d[@"min_ios"]; item.minIOS = [min isKindOfClass:[NSString class]] ? min : (min ? [min description] : @"");
+        id dl = d[@"download_url"]; item.downloadURL = [dl isKindOfClass:[NSString class]] ? dl : (dl ? [dl description] : @"");
+        id ic = d[@"icon"]; item.iconPath = [ic isKindOfClass:[NSString class]] ? ic : (ic ? [ic description] : @"");
+        id desc = d[@"description"]; item.desc = [desc isKindOfClass:[NSString class]] ? desc : (desc ? [desc description] : @"");
         [out addObject:item];
     }
     return out;

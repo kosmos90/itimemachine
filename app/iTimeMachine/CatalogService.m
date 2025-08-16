@@ -7,15 +7,22 @@
     if (!data) { return @[]; }
     NSError *err = nil;
     id obj = [NSJSONSerialization JSONObjectWithData:data options:0 error:&err];
-    if (err || ![obj isKindOfClass:[NSDictionary class]]) { return @[]; }
-    return [ITMAppItem itemsFromCatalogDictionary:(NSDictionary *)obj];
+    if (err || ![obj isKindOfClass:[NSDictionary class]]) {
+        NSLog(@"[CatalogService] JSON parse failed or not a dict: %@", err);
+        return @[];
+    }
+    NSArray *items = [ITMAppItem itemsFromCatalogDictionary:(NSDictionary *)obj];
+    NSLog(@"[CatalogService] Parsed %lu items", (unsigned long)items.count);
+    return items;
 }
 
 + (NSArray *)loadBundledCatalogItems {
     NSString *path = [[NSBundle mainBundle] pathForResource:@"catalog" ofType:@"json"];
     if (!path) { return @[]; }
     NSData *data = [NSData dataWithContentsOfFile:path];
-    return [self itemsFromCatalogData:data];
+    NSArray *items = [self itemsFromCatalogData:data];
+    NSLog(@"[CatalogService] Loaded bundled catalog: %lu items", (unsigned long)items.count);
+    return items;
 }
 
 // Remote source preferred by user
@@ -32,8 +39,13 @@
     NSURLResponse *resp = nil;
     NSError *err = nil;
     NSData *data = [NSURLConnection sendSynchronousRequest:req returningResponse:&resp error:&err];
-    if (err || !data) { return @[]; }
-    return [self itemsFromCatalogData:data];
+    if (err || !data) {
+        NSLog(@"[CatalogService] Remote fetch failed: %@", err);
+        return @[];
+    }
+    NSArray *items = [self itemsFromCatalogData:data];
+    NSLog(@"[CatalogService] Loaded remote catalog: %lu items", (unsigned long)items.count);
+    return items;
 }
 
 @end

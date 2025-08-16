@@ -80,6 +80,17 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: Fetch latest catalog into repo
+        run: |
+          python -m pip install --upgrade pip
+          pip install requests
+          python tools/fetch_catalog.py --owner stuffed18 --repo ipa-archive-updated --out catalog/catalog.json
+
       - name: Install dependencies
         run: |
           brew install llvm ldid libplist libxml2 dpkg

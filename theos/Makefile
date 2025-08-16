@@ -17,9 +17,9 @@ iTimeMachine_FRAMEWORKS = UIKit Foundation CoreGraphics
 
 iTimeMachine_CFLAGS += -fobjc-arc
 
-# Bundle resources (catalog)
+# Bundle resources (use repo catalog)
 iTimeMachine_RESOURCE_FILES = \
-  ../app/iTimeMachine/catalog.json \
+  ../catalog/catalog.json \
   ../app/iTimeMachine/icon.png \
   ../app/iTimeMachine/Default.png
 

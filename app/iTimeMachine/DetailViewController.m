@@ -119,7 +119,7 @@
 
             // Spawn ipainstaller
             pid_t pid;
-            int status;
+            int status = 0; // initialize to satisfy older compilers and -Wsometimes-uninitialized
             const char *tool = "/usr/bin/ipainstaller";
             const char *ipaPath = [destPath fileSystemRepresentation];
             char *const argv[] = { (char *)tool, (char *)ipaPath, NULL };
@@ -131,9 +131,17 @@
             dispatch_async(dispatch_get_main_queue(), ^{
                 self.installButton.enabled = YES;
                 self.installButton.alpha = 1.0;
-                NSString *msg = (spawnErr == 0 && WIFEXITED(status) && WEXITSTATUS(status) == 0)
-                                ? @"ipainstaller finished successfully (check device)."
-                                : [NSString stringWithFormat:@"ipainstaller failed (err=%d, status=%d)", spawnErr, WEXITSTATUS(status)];
+                NSString *msg;
+                if (spawnErr == 0) {
+                    if (WIFEXITED(status) && WEXITSTATUS(status) == 0) {
+                        msg = @"ipainstaller finished successfully (check device).";
+                    } else {
+                        int code = WIFEXITED(status) ? WEXITSTATUS(status) : -1;
+                        msg = [NSString stringWithFormat:@"ipainstaller exited with status %d", code];
+                    }
+                } else {
+                    msg = [NSString stringWithFormat:@"Failed to spawn ipainstaller (err=%d)", spawnErr];
+                }
                 UIAlertView *a = [[UIAlertView alloc] initWithTitle:@"Install Result"
                                                           message:msg
                                                          delegate:nil

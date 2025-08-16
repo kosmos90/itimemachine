@@ -3,6 +3,7 @@ import argparse
 import json
 import os
 import sys
+import time
 import requests
 
 GITHUB_API = "https://api.github.com"
@@ -15,32 +16,27 @@ Assumptions:
 This is an MVP and may need refinement to match the exact repo layout.
 """
 
-def list_repo_contents(owner, repo, path):
-    """List contents of a path in a GitHub repo via Contents API."""
-    r = requests.get(f"{GITHUB_API}/repos/{owner}/{repo}/contents/{path}")
+def auth_headers():
+    token = os.environ.get("GH_TOKEN") or os.environ.get("GITHUB_TOKEN")
+    headers = {"Accept": "application/vnd.github+json"}
+    if token:
+        headers["Authorization"] = f"Bearer {token}"
+    return headers
+
+
+def get_repo_tree(owner, repo, ref="main", retries=3):
+    url = f"{GITHUB_API}/repos/{owner}/{repo}/git/trees/{ref}?recursive=1"
+    headers = auth_headers()
+    for attempt in range(retries):
+        r = requests.get(url, headers=headers)
+        if r.status_code == 403 and attempt < retries - 1:
+            # Rate limit/backoff
+            time.sleep(2 ** attempt)
+            continue
+        r.raise_for_status()
+        return r.json()
+    # If we exit loop without return, raise last error
     r.raise_for_status()
-    return r.json()
-
-
-def gather_plists(owner, repo, path, out_list):
-    """Recursively walk `path` and append .plist file entries to out_list.
-    Each entry minimally includes name (stem), download_url pointer, and placeholders
-    for bundle_id/min_ios/icon.
-    """
-    items = list_repo_contents(owner, repo, path)
-    for entry in items:
-        etype = entry.get("type")
-        name = entry.get("name", "")
-        if etype == "dir":
-            gather_plists(owner, repo, entry.get("path"), out_list)
-        elif etype == "file" and name.endswith(".plist"):
-            out_list.append({
-                "name": os.path.splitext(name)[0],
-                "bundle_id": None,
-                "min_ios": None,
-                "download_url": entry.get("download_url"),
-                "icon": None,
-            })
 
 
 def main():
@@ -52,13 +48,28 @@ def main():
 
     os.makedirs(os.path.dirname(args.out), exist_ok=True)
 
-    # Recursively traverse `data/` and gather .plist files
-    catalog = []
+    # Use a single recursive tree call; then filter paths under data/ ending with .plist
     try:
-        gather_plists(args.owner, args.repo, "data", catalog)
+        tree = get_repo_tree(args.owner, args.repo, ref="main")
     except Exception as e:
-        print(f"Failed to traverse data/: {e}", file=sys.stderr)
+        print(f"Failed to fetch git tree: {e}", file=sys.stderr)
         sys.exit(1)
+
+    catalog = []
+    for node in tree.get("tree", []):
+        if node.get("type") == "blob":
+            path = node.get("path", "")
+            if path.startswith("data/") and path.endswith(".plist"):
+                base = os.path.basename(path)
+                name, _ = os.path.splitext(base)
+                download_url = f"https://raw.githubusercontent.com/{args.owner}/{args.repo}/main/{path}"
+                catalog.append({
+                    "name": name,
+                    "bundle_id": None,
+                    "min_ios": None,
+                    "download_url": download_url,
+                    "icon": None,
+                })
 
     with open(args.out, "w", encoding="utf-8") as f:
         json.dump({"items": catalog}, f, indent=2, ensure_ascii=False)

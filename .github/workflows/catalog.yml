@@ -30,6 +30,8 @@ jobs:
           pip install requests
 
       - name: Build catalog
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           python tools/fetch_catalog.py --owner stuffed18 --repo ipa-archive-updated --out catalog/catalog.json
 
@@ -86,6 +88,8 @@ jobs:
           python-version: '3.x'
 
       - name: Fetch latest catalog into repo
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           python -m pip install --upgrade pip
           pip install requests

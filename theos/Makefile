@@ -32,3 +32,6 @@ include $(THEOS_MAKE_PATH)/application.mk
 after-iTimeMachine-stage::
 	@cp -f "$(THEOS_STAGING_DIR)/Applications/$(APPLICATION_NAME).app/icon.png" \
 	      "$(THEOS_STAGING_DIR)/Applications/$(APPLICATION_NAME).app/icon@2x.png"
+	# Ensure Info.plist exists in the staged bundle
+	@cp -f "$(PWD)/Info.plist" \
+	      "$(THEOS_STAGING_DIR)/Applications/$(APPLICATION_NAME).app/Info.plist"

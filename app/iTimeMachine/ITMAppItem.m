@@ -15,6 +15,7 @@
         id dl = d[@"download_url"]; item.downloadURL = [dl isKindOfClass:[NSString class]] ? dl : (dl ? [dl description] : @"");
         id ic = d[@"icon"]; item.iconPath = [ic isKindOfClass:[NSString class]] ? ic : (ic ? [ic description] : @"");
         id desc = d[@"description"]; item.desc = [desc isKindOfClass:[NSString class]] ? desc : (desc ? [desc description] : @"");
+        id sz = d[@"size"]; if ([sz isKindOfClass:[NSNumber class]]) { item.size = sz; }
         [out addObject:item];
     }
     return out;

@@ -71,7 +71,18 @@
 - (void)refresh {
     self.titleLabel.text = self.item.name ?: @"";
     NSString *min = self.item.minIOS.length ? [NSString stringWithFormat:@" • iOS %@+", self.item.minIOS] : @"";
-    self.bundleLabel.text = [NSString stringWithFormat:@"%@%@", self.item.bundleID ?: @"", min];
+    NSString *sizeStr = @"";
+    if (self.item.size && [self.item.size longLongValue] > 0) {
+        double bytes = [self.item.size doubleValue];
+        double mb = bytes / (1024.0 * 1024.0);
+        if (mb >= 1.0) {
+            sizeStr = [NSString stringWithFormat:@" • %.1f MB", mb];
+        } else {
+            double kb = bytes / 1024.0;
+            sizeStr = [NSString stringWithFormat:@" • %.0f KB", kb];
+        }
+    }
+    self.bundleLabel.text = [NSString stringWithFormat:@"%@%@%@", self.item.bundleID ?: @"", min, sizeStr];
     NSString *d = self.item.desc.length ? self.item.desc : @"No description :<";
     self.descView.text = d;
 
@@ -96,8 +107,8 @@
     // Jailbreak-only path: download IPA and call /usr/bin/ipainstaller <path>
     ITMAppItem *item = self.item;
     if (!item.downloadURL.length) {
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"No Download URL"
-                                                        message:@"This catalog entry lacks a download URL."
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"aww man"
+                                                        message:@"This catalog entry lacks a download URL. I cant do anything to fix it. You are on your own."
                                                        delegate:nil
                                               cancelButtonTitle:@"OK"
                                               otherButtonTitles:nil];
@@ -142,8 +153,8 @@
             }
             if (![data writeToFile:destPath atomically:YES]) {
                 dispatch_async(dispatch_get_main_queue(), ^{
-                    UIAlertView *a = [[UIAlertView alloc] initWithTitle:@"Save Failed"
-                                                                  message:@"Could not write IPA to destination."
+                    UIAlertView *a = [[UIAlertView alloc] initWithTitle:@"Sad"
+                                                                  message:@"Something went wrong while saving the IPA :< (Maybe not enough space or permission or cant connect to archive.)"
                                                                  delegate:nil
                                                         cancelButtonTitle:@"OK"
                                                         otherButtonTitles:nil];
@@ -171,7 +182,7 @@
                 NSString *msg;
                 if (spawnErr == 0) {
                     if (WIFEXITED(status) && WEXITSTATUS(status) == 0) {
-                        msg = @"ipainstaller finished successfully (check device).";
+                        msg = @"ipainstaller finished successfully (check device home screen).";
                     } else {
                         int code = WIFEXITED(status) ? WEXITSTATUS(status) : -1;
                         msg = [NSString stringWithFormat:@"ipainstaller exited with status %d", code];

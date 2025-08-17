@@ -7,6 +7,7 @@
 @property (nonatomic, copy) NSString *downloadURL;
 @property (nonatomic, copy) NSString *iconPath;
 @property (nonatomic, copy) NSString *desc;
+@property (nonatomic, strong) NSNumber *size; // bytes (optional)
 
 + (NSArray *)itemsFromCatalogDictionary:(NSDictionary *)catalog;
 @end

@@ -18,7 +18,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.view.backgroundColor = [UIColor groupTableViewBackgroundColor];
+    self.view.backgroundColor = [UIColor whiteColor];
     self.title = @"Details";
 
     CGFloat pad = 12.0;
@@ -87,7 +87,8 @@
     self.descView.text = d;
 
     // Load icon if we have a URL; otherwise clear
-    self.iconView.image = nil;
+    // Default placeholder immediately; replace if we can load a real icon
+    self.iconView.image = [self placeholderIcon];
     if (self.item.iconPath.length) {
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
             NSData *data = [NSData dataWithContentsOfURL:[NSURL URLWithString:self.item.iconPath]];
@@ -101,6 +102,21 @@
             }
         });
     }
+}
+
+- (UIImage *)placeholderIcon {
+    CGSize size = CGSizeMake(57, 57);
+    UIGraphicsBeginImageContextWithOptions(size, NO, 0);
+    CGContextRef ctx = UIGraphicsGetCurrentContext();
+    [[UIColor colorWithWhite:0.95 alpha:1.0] setFill];
+    UIBezierPath *path = [UIBezierPath bezierPathWithRoundedRect:CGRectMake(0, 0, size.width, size.height) cornerRadius:11.0];
+    [path fill];
+    [[UIColor lightGrayColor] setStroke];
+    path.lineWidth = 1.0;
+    [path stroke];
+    UIImage *img = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return img;
 }
 
 - (void)onInstall {

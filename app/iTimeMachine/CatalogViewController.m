@@ -76,15 +76,31 @@
     self.searchBar = [[UISearchBar alloc] initWithFrame:CGRectZero];
     self.searchBar.delegate = self;
     [self.searchBar sizeToFit]; // ensure proper height on iOS 6
-    self.tableView.tableHeaderView = self.searchBar;
 
-    // Sorting segmented control in titleView
+    // Sorting segmented control placed in table header under the search bar
     UISegmentedControl *seg = [[UISegmentedControl alloc] initWithItems:@[@"Name", @"Bundle", @"Size"]];
     seg.selectedSegmentIndex = self.sortMode;
     [seg addTarget:self action:@selector(sortSegmentChanged:) forControlEvents:UIControlEventValueChanged];
-    self.navigationItem.titleView = seg;
 
-    // Random button
+    CGFloat headerWidth = self.view.bounds.size.width;
+    CGFloat searchH = self.searchBar.bounds.size.height;
+    CGFloat segH = 30.0;
+    CGFloat pad = 8.0;
+    UIView *header = [[UIView alloc] initWithFrame:CGRectMake(0, 0, headerWidth, searchH + pad + segH + pad)];
+    // position search bar
+    CGRect sbf = self.searchBar.frame;
+    sbf.origin.x = 0; sbf.origin.y = 0; sbf.size.width = headerWidth;
+    self.searchBar.frame = sbf;
+    [header addSubview:self.searchBar];
+    // position segmented control
+    CGFloat segW = headerWidth - 2*pad;
+    seg.frame = CGRectMake(pad, CGRectGetMaxY(self.searchBar.frame) + pad, segW, segH);
+    seg.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+    [header addSubview:seg];
+
+    self.tableView.tableHeaderView = header;
+
+    // Random button on right side of nav bar
     UIBarButtonItem *randBtn = [[UIBarButtonItem alloc] initWithTitle:@"Random" style:UIBarButtonItemStyleBordered target:self action:@selector(randomTapped:)];
     self.navigationItem.rightBarButtonItem = randBtn;
 

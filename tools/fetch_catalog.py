@@ -79,6 +79,10 @@ def main():
     fetch_size_head = os.environ.get("ITM_FETCH_SIZE_HEAD", "0") == "1"
     head_limit = int(os.environ.get("ITM_HEAD_LIMIT", "200"))
     head_count = 0
+    enrich_itunes = os.environ.get("ITM_ENRICH_ITUNES", "0") == "1"
+    enrich_limit = int(os.environ.get("ITM_ENRICH_LIMIT", "300"))
+    enrich_count = 0
+    itunes_cache = {}
 
     for path in selected:
         raw_url = f"https://raw.githubusercontent.com/{args.owner}/{args.repo}/main/{path}"
@@ -101,7 +105,10 @@ def main():
             continue
 
         # Try to find a direct IPA URL in the plist (heuristics)
-        ipa_url = pl.get("download_url") or pl.get("downloadURL") or pl.get("url") or pl.get("ipa") or pl.get("ipa_url")
+        ipa_url = (
+            pl.get("download_url") or pl.get("downloadURL") or pl.get("url") or
+            pl.get("ipa") or pl.get("ipa_url") or pl.get("ipaURL") or pl.get("install_url")
+        )
         if isinstance(ipa_url, str) and ipa_url.startswith("http"):
             download_url = ipa_url
         else:
@@ -119,12 +126,39 @@ def main():
             except Exception:
                 pass
 
+        # Optionally enrich via iTunes Lookup for description and artwork
+        desc_val = None
+        icon_val = None
+        if enrich_itunes and isinstance(bundle_id, str) and bundle_id and enrich_count < enrich_limit:
+            if bundle_id in itunes_cache:
+                res = itunes_cache[bundle_id]
+            else:
+                try:
+                    lu = f"https://itunes.apple.com/lookup?bundleId={bundle_id}&country=us"
+                    ir = requests.get(lu, timeout=8)
+                    if ir.ok:
+                        res = ir.json()
+                        itunes_cache[bundle_id] = res
+                    else:
+                        res = None
+                except Exception:
+                    res = None
+                enrich_count += 1
+            if res and isinstance(res, dict):
+                arr = res.get("results") or []
+                if arr and isinstance(arr, list):
+                    first = arr[0]
+                    if isinstance(first, dict):
+                        desc_val = first.get("description")
+                        icon_val = first.get("artworkUrl100") or first.get("artworkUrl60")
+
         catalog.append({
             "name": str(name) if name is not None else "Unknown",
             "bundle_id": str(bundle_id) if bundle_id is not None else "",
             "min_ios": str(min_ios) if min_ios is not None else "",
             "download_url": download_url,
-            "icon": icon,
+            "icon": icon_val or icon,
+            "description": desc_val,
             "size": size_val,
         })
 

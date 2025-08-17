@@ -84,6 +84,9 @@
     }
     self.bundleLabel.text = [NSString stringWithFormat:@"%@%@%@", self.item.bundleID ?: @"", min, sizeStr];
     NSString *d = self.item.desc.length ? self.item.desc : @"No description :<";
+    if (self.item.downloadURL.length) {
+        d = [d stringByAppendingFormat:@"\n\nDownload: %@", self.item.downloadURL];
+    }
     self.descView.text = d;
 
     // Load icon if we have a URL; otherwise clear
@@ -107,7 +110,6 @@
 - (UIImage *)placeholderIcon {
     CGSize size = CGSizeMake(57, 57);
     UIGraphicsBeginImageContextWithOptions(size, NO, 0);
-    CGContextRef ctx = UIGraphicsGetCurrentContext();
     [[UIColor colorWithWhite:0.95 alpha:1.0] setFill];
     UIBezierPath *path = [UIBezierPath bezierPathWithRoundedRect:CGRectMake(0, 0, size.width, size.height) cornerRadius:11.0];
     [path fill];
